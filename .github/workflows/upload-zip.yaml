@@ -19,10 +19,9 @@ jobs:
 
       - name: Upload to server
         env:
-          USERNAME: ${{ secrets.UPLOAD_USERNAME }}   # your server username
-          REPO: ${{ github.event.repository.name }} # just the repo name
+          REPO: ${{ github.repository }} # just the repo name
         run: |
           curl -f -X POST \
             -F "file=@repo.zip" \
-            "https://mdq.anb.codes/upload/${USERNAME}/${REPO}"
+            "https://mdq.anb.codes/upload/${REPO}"
 
