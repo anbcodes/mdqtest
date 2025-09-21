@@ -1,0 +1,28 @@
+name: Upload Repository as ZIP to Server
+
+on:
+  workflow_dispatch: # run manually
+  push:              # run on push to main
+    branches:
+      - main
+
+jobs:
+  zip-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create zip file
+        run: |
+          zip -r repo.zip .
+
+      - name: Upload to server
+        env:
+          USERNAME: ${{ secrets.UPLOAD_USERNAME }}   # your server username
+          REPO: ${{ github.event.repository.name }} # just the repo name
+        run: |
+          curl -f -X POST \
+            -F "file=@repo.zip" \
+            "https://mdq.anb.codes/upload/${USERNAME}/${REPO}"
+
